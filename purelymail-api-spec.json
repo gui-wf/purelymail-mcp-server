@@ -1,0 +1,1437 @@
+{
+  "info": {
+    "title": "Purelymail API",
+    "version": "0.0.1",
+    "description": "This is the Purelymail API specification.",
+    "license": {
+      "name": "Proprietary",
+      "url": "https://purelymail.com"
+    }
+  },
+  "tags": [
+    {
+      "name": "User",
+      "description": "Operations related to users"
+    },
+    {
+      "name": "User Password Reset",
+      "description": "Operations related to users' password reset"
+    },
+    {
+      "name": "Routing",
+      "description": "Related to mail routing"
+    },
+    {
+      "name": "Domains",
+      "description": "Operations related to domains"
+    },
+    {
+      "name": "Billing",
+      "description": "Operations related to billing and credit"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://purelymail.com"
+    },
+    {
+      "url": "https://localhost:1443"
+    }
+  ],
+  "paths": {
+    "/api/v0/createUser": {
+      "post": {
+        "operationId": "Create User",
+        "summary": "Creates a user",
+        "description": "Creates a new user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateUserRequest"
+        }
+      }
+    },
+    "/api/v0/deleteUser": {
+      "post": {
+        "operationId": "Delete User",
+        "summary": "Deletes a user",
+        "description": "Deletes a user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteUserRequest"
+        }
+      }
+    },
+    "/api/v0/listUser": {
+      "post": {
+        "operationId": "List Users",
+        "summary": "Lists all users under your account.",
+        "description": "Lists all users under your account (up to 1000).",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ListUserResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmptyRequest"
+        }
+      }
+    },
+    "/api/v0/modifyUser": {
+      "post": {
+        "operationId": "Modify User",
+        "summary": "Modifies a user",
+        "description": "Modifies a user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ModifyUserRequest"
+        }
+      }
+    },
+    "/api/v0/getUser": {
+      "post": {
+        "operationId": "Get User",
+        "summary": "Gets a user",
+        "description": "Retrieves details of a user.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/GetUserResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/GetUserRequest"
+        }
+      }
+    },
+    "/api/v0/upsertPasswordReset": {
+      "post": {
+        "operationId": "Create or update Password Reset Method",
+        "summary": "Creates or updates a password reset method (either phone or email).",
+        "description": "Creates or updates a password reset method (either phone or email).",
+        "tags": [
+          "User",
+          "User Password Reset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpsertPasswordResetRequest"
+        }
+      }
+    },
+    "/api/v0/deletePasswordReset": {
+      "post": {
+        "operationId": "Delete Password Reset Method",
+        "summary": "Deletes a password reset method.",
+        "description": "Deletes a password reset method.",
+        "tags": [
+          "User",
+          "User Password Reset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeletePasswordResetRequest"
+        }
+      }
+    },
+    "/api/v0/listPasswordReset": {
+      "post": {
+        "operationId": "List Password Reset Methods",
+        "summary": "Lists all password reset methods for a user.",
+        "description": "Lists all password reset methods for a user.",
+        "tags": [
+          "User",
+          "User Password Reset"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ListPasswordResetResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ListPasswordResetRequest"
+        }
+      }
+    },
+    "/api/v0/createRoutingRule": {
+      "post": {
+        "operationId": "Create Routing Rule",
+        "summary": "Creates a new routing rule for a domain",
+        "description": "Routing rule must not have the same user/prefix as any other existing rules for the domain.",
+        "tags": [
+          "Routing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateRoutingRequest"
+        }
+      }
+    },
+    "/api/v0/deleteRoutingRule": {
+      "post": {
+        "operationId": "Delete Routing Rule",
+        "summary": "Deletes an existing routing rule",
+        "description": "",
+        "tags": [
+          "Routing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteRoutingRequest"
+        }
+      }
+    },
+    "/api/v0/listRoutingRules": {
+      "post": {
+        "operationId": "List Routing Rules",
+        "summary": "Lists all routing rules active under your account",
+        "description": "",
+        "tags": [
+          "Routing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ListRoutingResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmptyRequest"
+        }
+      }
+    },
+    "/api/v0/addDomain": {
+      "post": {
+        "operationId": "Add Domain",
+        "summary": "Adds a domain.",
+        "description": "Adds a domain, assuming it passes DNS checks.",
+        "tags": [
+          "Domains"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AddDomainRequest"
+        }
+      }
+    },
+    "/api/v0/getOwnershipCode": {
+      "post": {
+        "operationId": "Get Ownership Code",
+        "summary": "Gets ownership code record",
+        "description": "Gets the DNS record value of the Purelymail ownership proof record, required to add a domain",
+        "tags": [
+          "Domains"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/GetOwnershipCodeResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmptyRequest"
+        }
+      }
+    },
+    "/api/v0/listDomains": {
+      "post": {
+        "operationId": "List Domains",
+        "summary": "Lists domains accessible to an account.",
+        "description": "Lists domains accessible to an account, possibly including shared domains.",
+        "tags": [
+          "Domains"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/ListDomainsResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ListDomainsRequest"
+        }
+      }
+    },
+    "/api/v0/updateDomainSettings": {
+      "post": {
+        "operationId": "Update Domain Settings",
+        "summary": "Updates settings for a domain",
+        "description": "Updates settings for an existing owned domain.",
+        "tags": [
+          "Domains"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateDomainSettingsRequest"
+        }
+      }
+    },
+    "/api/v0/deleteDomain": {
+      "post": {
+        "operationId": "Delete Domain",
+        "summary": "Delete Domain",
+        "description": "Deletes a domain, and all dependent settings and users.",
+        "tags": [
+          "Domains"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteDomainRequest"
+        }
+      }
+    },
+    "/api/v0/createAppPassword": {
+      "post": {
+        "operationId": "Create App Password",
+        "summary": "Creates an app password",
+        "description": "Creates a new app password.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/CreateAppPasswordResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CreateAppPassword"
+        }
+      }
+    },
+    "/api/v0/deleteAppPassword": {
+      "post": {
+        "operationId": "Delete App Password",
+        "summary": "Deletes app password",
+        "description": "Deletes an app password.",
+        "tags": [
+          "User"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/EmptyResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/DeleteAppPasswordRequest"
+        }
+      }
+    },
+    "/api/v0/checkAccountCredit": {
+      "post": {
+        "operationId": "Check Account Credit",
+        "summary": "Returns current account credit.",
+        "description": "Returns current account credit, as a BigDecimal string with precision 64.",
+        "tags": [
+          "Billing"
+        ],
+        "responses": {
+          "200": {
+            "description": "Result of operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "$ref": "#/components/schemas/CheckCreditResponse"
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EmptyRequest"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "token": {
+        "name": "Purelymail-Api-Token",
+        "type": "apiKey",
+        "in": "header"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
+      "CreateUserRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Local part of username, e.g. \"user\" in \"user@domain.com\"",
+            "type": "string"
+          },
+          "domainName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "enablePasswordReset": {
+            "default": true,
+            "type": "boolean"
+          },
+          "recoveryEmail": {
+            "type": "string"
+          },
+          "recoveryEmailDescription": {
+            "type": "string"
+          },
+          "recoveryPhone": {
+            "type": "string"
+          },
+          "recoveryPhoneDescription": {
+            "type": "string"
+          },
+          "enableSearchIndexing": {
+            "default": true,
+            "type": "boolean"
+          },
+          "sendWelcomeEmail": {
+            "default": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "userName",
+          "domainName",
+          "password"
+        ]
+      },
+      "EmptyResponse": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "DeleteUserRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Full username, e.g. \"user@domain.com\"",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userName"
+        ]
+      },
+      "EmptyRequest": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "ListUserResponse": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "users"
+        ]
+      },
+      "ModifyUserRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Full username, e.g. \"user@domain.com\"",
+            "type": "string"
+          },
+          "newUserName": {
+            "description": "Full new username, e.g. \"user@domain.com\"",
+            "type": "string"
+          },
+          "newPassword": {
+            "description": "New password for user",
+            "type": "string"
+          },
+          "enableSearchIndexing": {
+            "description": "Whether search indexing should be enabled for this user. Indexes may take some time after enabling to be created.",
+            "type": "boolean"
+          },
+          "enablePasswordReset": {
+            "description": "Whether this user can have their password reset.",
+            "type": "boolean"
+          },
+          "requireTwoFactorAuthentication": {
+            "description": "Whether this user requires 2FA for login.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "userName"
+        ]
+      },
+      "GetUserRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Full username, e.g. \"user@domain.com\"",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userName"
+        ]
+      },
+      "UserPasswordResetMethodType": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "GetUserPasswordResetMethod": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/UserPasswordResetMethodType"
+          },
+          "target": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "allowMfaReset": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "target",
+          "description",
+          "allowMfaReset"
+        ]
+      },
+      "GetUserResponse": {
+        "type": "object",
+        "properties": {
+          "enableSearchIndexing": {
+            "type": "boolean"
+          },
+          "recoveryEnabled": {
+            "type": "boolean"
+          },
+          "requireTwoFactorAuthentication": {
+            "type": "boolean"
+          },
+          "enableSpamFiltering": {
+            "type": "boolean"
+          },
+          "resetMethods": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/GetUserPasswordResetMethod"
+            }
+          }
+        },
+        "required": [
+          "enableSearchIndexing",
+          "recoveryEnabled",
+          "requireTwoFactorAuthentication",
+          "enableSpamFiltering",
+          "resetMethods"
+        ]
+      },
+      "UpsertPasswordResetRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Username",
+            "type": "string"
+          },
+          "existingTarget": {
+            "description": "Target from list operation. If provided, update existing method matching target instead of creating a new one.",
+            "type": "string"
+          },
+          "type": {
+            "description": "Type of password reset, either 'email' or 'phone'",
+            "type": "string"
+          },
+          "target": {
+            "description": "Email address or phone number",
+            "type": "string"
+          },
+          "description": {
+            "description": "Human-readable description",
+            "default": "",
+            "type": "string"
+          },
+          "allowMfaReset": {
+            "description": "Whether this method should allow a user's MFA to be reset as well (defaults to true)",
+            "default": true,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "userName",
+          "type",
+          "target"
+        ]
+      },
+      "DeletePasswordResetRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Username",
+            "type": "string"
+          },
+          "target": {
+            "description": "Target of password reset method",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userName"
+        ]
+      },
+      "ListPasswordResetRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "userName"
+        ]
+      },
+      "ListPasswordResetResponseItem": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "description": "Type of password reset, either 'email' or 'phone'",
+            "type": "string"
+          },
+          "target": {
+            "description": "Email address or phone number",
+            "type": "string"
+          },
+          "description": {
+            "description": "Human-readable description",
+            "type": "string"
+          },
+          "allowMfaReset": {
+            "description": "Whether this method should allow a user's MFA to be reset as well (defaults to true)",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "type",
+          "target",
+          "description",
+          "allowMfaReset"
+        ]
+      },
+      "ListPasswordResetResponse": {
+        "type": "object",
+        "properties": {
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ListPasswordResetResponseItem"
+            }
+          }
+        },
+        "required": [
+          "users"
+        ]
+      },
+      "CreateRoutingRequest": {
+        "type": "object",
+        "properties": {
+          "domainName": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "boolean"
+          },
+          "matchUser": {
+            "description": "The local part of the user address to be matched, i.e. \"user\" in \"user@domain.org\"",
+            "type": "string"
+          },
+          "targetAddresses": {
+            "description": "List of full email addresses that this mail will be rerouted to",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "catchall": {
+            "description": "Whether this is a 'catchall' rule that will not fire if address maps to a user",
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "domainName",
+          "prefix",
+          "matchUser",
+          "targetAddresses"
+        ]
+      },
+      "DeleteRoutingRequest": {
+        "type": "object",
+        "properties": {
+          "routingRuleId": {
+            "description": "This should be returned from a ListRoutingRequest",
+            "type": "number",
+            "format": "int64"
+          }
+        },
+        "required": [
+          "routingRuleId"
+        ]
+      },
+      "RoutingRule": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "format": "int64"
+          },
+          "domainName": {
+            "type": "string"
+          },
+          "prefix": {
+            "type": "boolean"
+          },
+          "matchUser": {
+            "type": "string"
+          },
+          "targetAddresses": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "catchall": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "domainName",
+          "prefix",
+          "matchUser",
+          "targetAddresses",
+          "catchall"
+        ]
+      },
+      "ListRoutingResponse": {
+        "type": "object",
+        "properties": {
+          "rules": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoutingRule"
+            }
+          }
+        },
+        "required": [
+          "rules"
+        ]
+      },
+      "AddDomainRequest": {
+        "type": "object",
+        "properties": {
+          "domainName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "domainName"
+        ]
+      },
+      "GetOwnershipCodeResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code"
+        ]
+      },
+      "ListDomainsRequest": {
+        "type": "object",
+        "properties": {
+          "includeShared": {
+            "description": "Whether to include basic Purelymail shared domains in the response",
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": []
+      },
+      "ApiDomainDnsSummary": {
+        "type": "object",
+        "properties": {
+          "passesMx": {
+            "type": "boolean"
+          },
+          "passesSpf": {
+            "type": "boolean"
+          },
+          "passesDkim": {
+            "type": "boolean"
+          },
+          "passesDmarc": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "passesMx",
+          "passesSpf",
+          "passesDkim",
+          "passesDmarc"
+        ]
+      },
+      "ApiDomainInfo": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "allowAccountReset": {
+            "description": "Whether this domain can be used to reset an account's password",
+            "type": "boolean"
+          },
+          "symbolicSubaddressing": {
+            "description": "Whether the symbolic subaddressing is enabled on this domain",
+            "type": "boolean"
+          },
+          "isShared": {
+            "description": "Whether this domain is shared (owned by Purelymail)",
+            "type": "boolean"
+          },
+          "dnsSummary": {
+            "description": "Summary of current known DNS records",
+            "$ref": "#/components/schemas/ApiDomainDnsSummary"
+          }
+        },
+        "required": [
+          "name",
+          "allowAccountReset",
+          "symbolicSubaddressing",
+          "isShared",
+          "dnsSummary"
+        ]
+      },
+      "ListDomainsResponse": {
+        "type": "object",
+        "properties": {
+          "domains": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiDomainInfo"
+            }
+          }
+        },
+        "required": [
+          "domains"
+        ]
+      },
+      "UpdateDomainSettingsRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "allowAccountReset": {
+            "type": "boolean"
+          },
+          "symbolicSubaddressing": {
+            "type": "boolean"
+          },
+          "recheckDns": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "DeleteDomainRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateAppPassword": {
+        "type": "object",
+        "properties": {
+          "userHandle": {
+            "description": "Full \"user@domain.com\"",
+            "type": "string"
+          },
+          "name": {
+            "description": "Optional user-friendly description",
+            "default": "",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userHandle"
+        ]
+      },
+      "CreateAppPasswordResponse": {
+        "type": "object",
+        "properties": {
+          "appPassword": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "appPassword"
+        ]
+      },
+      "DeleteAppPasswordRequest": {
+        "type": "object",
+        "properties": {
+          "userName": {
+            "description": "Full username, e.g. \"user@domain.com\"",
+            "type": "string"
+          },
+          "appPassword": {
+            "description": "Full app password",
+            "type": "string"
+          }
+        },
+        "required": [
+          "userName",
+          "appPassword"
+        ]
+      },
+      "CheckCreditResponse": {
+        "type": "object",
+        "properties": {
+          "credit": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "credit"
+        ]
+      }
+    },
+    "requestBodies": {
+      "CreateUserRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateUserRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "DeleteUserRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteUserRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "EmptyRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/EmptyRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "ModifyUserRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ModifyUserRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "GetUserRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetUserRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "UpsertPasswordResetRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpsertPasswordResetRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "DeletePasswordResetRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeletePasswordResetRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "ListPasswordResetRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListPasswordResetRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "CreateRoutingRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateRoutingRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "DeleteRoutingRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteRoutingRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "AddDomainRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AddDomainRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "ListDomainsRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ListDomainsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "UpdateDomainSettingsRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/UpdateDomainSettingsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "DeleteDomainRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteDomainRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "CreateAppPassword": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/CreateAppPassword"
+            }
+          }
+        },
+        "required": true
+      },
+      "DeleteAppPasswordRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteAppPasswordRequest"
+            }
+          }
+        },
+        "required": true
+      }
+    }
+  },
+  "openapi": "3.0.0",
+  "security": [
+    {
+      "token": []
+    }
+  ]
+}
