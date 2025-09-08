@@ -28,8 +28,10 @@ See `KNOWN_ISSUES.md` for detailed documentation of current limitations and work
 ```bash
 # Development
 nix develop              # Enter dev environment
+npm run fetch:swagger    # Download latest swagger spec from PurelyMail
 npm run generate:types   # Regenerate TypeScript types from swagger
 npm run generate:docs    # Update endpoint-descriptions.md
+npm run update:api       # Complete API update (fetch + generate types + docs)
 npm run dev             # Run server in development mode
 npm run test:mock       # Test with mock data
 npm run inspector       # Launch MCP Inspector
@@ -67,13 +69,11 @@ generated-client/       # DO NOT MODIFY - codegen output
 
 ## Development Workflow
 
-### Adding New Endpoints
-1. Update `purelymail-api-spec.json` with new endpoints
-2. Run `npm run generate:types` to regenerate TypeScript types
-3. Run `npm run generate:docs` to update documentation
-4. Test with `MOCK_MODE=true npm run inspector`
-5. Implement mock responses in `mock-client.ts`
-6. Test with real API
+### Updating from PurelyMail API Changes
+1. Run `npm run update:api` to fetch latest spec and regenerate everything
+2. Test with `MOCK_MODE=true npm run inspector` to verify tool registration
+3. Update mock responses in `mock-client.ts` if new endpoints were added
+4. Test with real API to ensure compatibility
 
 ### Testing Changes
 1. Always test with mocks first: `npm run test:mock`
@@ -111,9 +111,9 @@ generated-client/       # DO NOT MODIFY - codegen output
 - Ensure `.js` extension in imports
 - Run `npm run generate:types` if types are missing
 
-### Type errors after API change
-- Regenerate types: `npm run generate:types`
-- Update mock implementations to match new types
+### Type errors after API changes
+- Run `npm run update:api` to fetch latest spec and regenerate types
+- Update mock implementations to match new types if needed
 
 ### MCP Inspector can't connect
 - Check server is using StdioServerTransport

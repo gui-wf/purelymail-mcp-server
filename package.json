@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "fetch:swagger": "node scripts/fetch-swagger.js",
     "generate:types": "openapi-typescript purelymail-api-spec.json -o src/types/purelymail-api.ts",
     "generate:docs": "node scripts/extract-endpoints.js > endpoint-descriptions.md",
+    "update:api": "npm run fetch:swagger && npm run generate:types && npm run generate:docs",
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "test": "vitest",
