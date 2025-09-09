@@ -138,22 +138,36 @@ Or if not using Nix:
 ### Available Scripts
 
 ```bash
-npm run generate:client  # Regenerate TypeScript client from swagger
+npm run fetch:swagger    # Download latest API spec from PurelyMail
+npm run generate:types   # Regenerate TypeScript types from spec
 npm run generate:docs    # Update endpoint documentation
+npm run update:api       # Complete API update workflow
 npm run build           # Compile TypeScript
 npm run dev             # Run server in development mode
 npm run test:mock       # Test with mock data
 npm run inspector       # Launch MCP Inspector
 ```
 
-### Regenerating from Updated API
+### API Updates
 
-When PurelyMail updates their API:
+**Automated (Recommended):**
+- GitHub Actions automatically checks for API changes twice weekly
+- Creates pull requests with updated specifications, types, and documentation
+- No manual intervention required
 
-1. Download new swagger-spec.js from https://news.purelymail.com/api/swagger-spec.js
-2. Run `npm run generate:client` to update TypeScript types
-3. Run `npm run generate:docs` to update documentation
-4. Test with `MOCK_MODE=true npm run inspector`
+**Manual Updates:**
+```bash
+# One-Command Complete update workflow
+npm run update:api
+
+  # OR step by step:
+  npm run fetch:swagger    # Download latest spec
+  npm run generate:types   # Regenerate TypeScript types
+  npm run generate:docs    # Update documentation
+
+# Using Nix
+nix run .#update-api
+```
 
 ## Tool Usage Patterns
 

@@ -70,10 +70,18 @@ generated-client/       # DO NOT MODIFY - codegen output
 ## Development Workflow
 
 ### Updating from PurelyMail API Changes
+
+**Manual Updates:**
 1. Run `npm run update:api` to fetch latest spec and regenerate everything
-2. Test with `MOCK_MODE=true npm run inspector` to verify tool registration
+2. Test with `MOCK_MODE=true npm run inspector` to verify tool registration  
 3. Update mock responses in `mock-client.ts` if new endpoints were added
 4. Test with real API to ensure compatibility
+
+**Automated Updates:**
+- GitHub Actions runs twice weekly (Tuesday/Friday) to check for API changes
+- Creates PR automatically if changes are detected
+- Includes regenerated types and documentation
+- Review checklist provided in PR description
 
 ### Testing Changes
 1. Always test with mocks first: `npm run test:mock`

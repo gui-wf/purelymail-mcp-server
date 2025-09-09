@@ -1,0 +1,114 @@
+name: Update PurelyMail API Specification
+
+on:
+  schedule:
+    # Run twice weekly: Tuesday at 10:00 UTC and Friday at 14:00 UTC
+    - cron: '0 10 * * 2'  # Tuesday 10:00 UTC
+    - cron: '0 14 * * 5'  # Friday 14:00 UTC
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  update-api-spec:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for API specification changes
+        id: check-changes
+        run: |
+          echo "🔍 Checking for PurelyMail API specification changes..."
+          
+          # Backup current spec
+          cp purelymail-api-spec.json purelymail-api-spec.json.backup
+          
+          # Fetch latest spec (with fallback)
+          npm run fetch:swagger
+          
+          # Check if spec actually changed
+          if ! diff -q purelymail-api-spec.json.backup purelymail-api-spec.json >/dev/null 2>&1; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+            echo "✅ API specification changes detected"
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+            echo "ℹ️  No changes in API specification"
+          fi
+
+      - name: Update types and documentation
+        if: steps.check-changes.outputs.changes_detected == 'true'
+        run: |
+          echo "🔧 Regenerating TypeScript types and documentation..."
+          npm run generate:types
+          npm run generate:docs
+
+      - name: Create Pull Request
+        if: steps.check-changes.outputs.changes_detected == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            Update PurelyMail API specification
+            
+            - Fetched latest swagger spec from PurelyMail
+            - Regenerated TypeScript types
+            - Updated endpoint documentation
+            
+            🤖 Automated update via GitHub Actions
+          title: 'chore: Update PurelyMail API specification'
+          body: |
+            ## 🔄 Automated API Specification Update
+            
+            This PR contains automated updates to the PurelyMail API specification.
+            
+            ### Changes
+            - ✅ Updated `purelymail-api-spec.json` from PurelyMail's live API
+            - ✅ Regenerated TypeScript types in `src/types/purelymail-api.ts`
+            - ✅ Updated endpoint documentation in `endpoint-descriptions.md`
+            
+            ### Review Checklist
+            - [ ] Review the swagger specification changes
+            - [ ] Check if any new endpoints were added
+            - [ ] Verify TypeScript types look correct
+            - [ ] Update mock responses in `src/mocks/mock-client.ts` if needed
+            - [ ] Test with `npm run test:mock`
+            - [ ] Test with real API if possible
+            
+            ### Testing
+            ```bash
+            # Test with mocks
+            npm run test:mock
+            
+            # Test MCP Inspector
+            MOCK_MODE=true npm run inspector
+            ```
+            
+            ---
+            🤖 This PR was created automatically by the **Update API Specification** workflow.
+            
+            If the changes look good, merge this PR. If there are issues, close it and investigate manually.
+          branch: automated/update-api-spec
+          delete-branch: true
+          draft: false
+          labels: |
+            automated
+            api-update
+            dependencies
+
+      - name: Comment on no changes
+        if: steps.check-changes.outputs.changes_detected == 'false'
+        run: |
+          echo "ℹ️ No changes detected in PurelyMail API specification."
+          echo "The specification is up to date as of $(date)."

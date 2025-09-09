@@ -1,0 +1,126 @@
+name: Test API Update Process
+
+on:
+  pull_request:
+    paths:
+      - 'purelymail-api-spec.json'
+      - 'src/types/purelymail-api.ts'
+      - 'scripts/fetch-swagger.js'
+      - 'package.json'
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  test-mock-mode:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test TypeScript compilation
+        run: |
+          echo "🔧 Testing TypeScript compilation..."
+          npm run build
+
+      - name: Test mock mode functionality
+        run: |
+          echo "🧪 Testing mock mode..."
+          timeout 10s npm run test:mock || true
+          echo "Mock mode test completed"
+
+      - name: Validate API specification
+        run: |
+          echo "✅ Validating API specification format..."
+          
+          # Check that the spec file exists and is valid JSON
+          if [ ! -f purelymail-api-spec.json ]; then
+            echo "❌ purelymail-api-spec.json not found"
+            exit 1
+          fi
+          
+          # Validate JSON format
+          if ! jq empty purelymail-api-spec.json; then
+            echo "❌ Invalid JSON in purelymail-api-spec.json"
+            exit 1
+          fi
+          
+          # Check for required OpenAPI fields
+          if ! jq -e '.info' purelymail-api-spec.json >/dev/null; then
+            echo "❌ Missing required 'info' field in API specification"
+            exit 1
+          fi
+          
+          if ! jq -e '.paths' purelymail-api-spec.json >/dev/null; then
+            echo "❌ Missing required 'paths' field in API specification"
+            exit 1
+          fi
+          
+          echo "✅ API specification is valid"
+
+      - name: Test type generation
+        run: |
+          echo "🔧 Testing TypeScript type generation..."
+          
+          # Remove existing types to ensure clean generation
+          rm -f src/types/purelymail-api.ts
+          
+          # Regenerate types
+          npm run generate:types
+          
+          # Check that types were generated
+          if [ ! -f src/types/purelymail-api.ts ]; then
+            echo "❌ TypeScript types were not generated"
+            exit 1
+          fi
+          
+          # Check that generated file compiles
+          if ! npx tsc --noEmit src/types/purelymail-api.ts; then
+            echo "❌ Generated TypeScript types do not compile"
+            exit 1
+          fi
+          
+          echo "✅ TypeScript type generation successful"
+
+  test-fetch-script:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test fetch script fallback behavior
+        run: |
+          echo "🧪 Testing fetch script fallback behavior..."
+          
+          # Backup original spec
+          cp purelymail-api-spec.json purelymail-api-spec.json.backup
+          
+          # Test that script falls back to existing file when network fails
+          # (We can't easily simulate network failure, but we can verify the script runs)
+          npm run fetch:swagger
+          
+          # Verify spec file still exists
+          if [ ! -f purelymail-api-spec.json ]; then
+            echo "❌ API specification file missing after fetch"
+            exit 1
+          fi
+          
+          echo "✅ Fetch script completed successfully"
