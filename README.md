@@ -117,6 +117,10 @@ Or if not using Nix:
 }
 ```
 
+## Documentation
+
+See `docs/` for project documentation including license tracking and known issues.
+
 ## Development
 
 ### Project Structure
@@ -128,6 +132,8 @@ Or if not using Nix:
 │   │   └── tool-generator.ts # Automatic tool generation from swagger
 │   └── mocks/
 │       └── mock-client.ts    # Mock API implementation
+├── .claude/commands/         # Claude Code automation commands
+├── docs/                     # Project documentation
 ├── generated-client/         # Auto-generated TypeScript client
 ├── scripts/
 │   └── extract-endpoints.js  # Documentation generation
@@ -243,6 +249,10 @@ nix run .#update-api
 
 ## License
 
-AIDEV-TODO: Specify License - Research about which License aligns more with my values and what I want for this Project
+This project is licensed under a custom non-commercial license - see the [LICENSE](LICENSE) file for details.
 
-[Specify your license here]
+### Commercial Use
+This software is available for non-commercial use only. For commercial licensing, please contact fairuse@gui.wf.
+
+### Dependencies
+This project uses MIT and Apache-2.0 licensed dependencies. See docs/package-licenses.md for full dependency licensing information.

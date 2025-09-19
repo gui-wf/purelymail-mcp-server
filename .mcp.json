@@ -17,6 +17,13 @@
         "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}",
         "MOCK_MODE": "false"
       }
+    },
+    "perplexity": {
+      "command": "npx",
+      "args": ["-y", "perplexity-mcp"],
+      "env": {
+        "PERPLEXITY_API_KEY": "${PERPLEXITY_API_KEY}"
+      }
     }
   }
 }

@@ -1,0 +1,124 @@
+name: 🐛 MCP Server Bug Report
+description: Report an issue with the PurelyMail MCP Server
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug with the PurelyMail MCP Server! 
+        This template helps us understand AI assistant interaction issues.
+        
+  - type: dropdown
+    id: assistant
+    attributes:
+      label: AI Assistant/Tool Used
+      description: Which AI assistant were you using when the issue occurred?
+      options:
+        - Claude Desktop
+        - Claude Code CLI
+        - Cursor
+        - Codex CLI
+        - Continue (VS Code)
+        - Aider
+        - Other MCP Client
+        - Custom Implementation
+    validations:
+      required: true
+      
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Exact Prompt Used
+      description: Please provide the exact prompt/request you gave to the AI assistant
+      placeholder: |
+        Example: "Create a new email account thomas@cool.shop with a strong password"
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: context-pollution
+    attributes:
+      label: Context Pollution Level
+      description: On a scale of 1-10, how much of your prior conversation with the assistant was related to PurelyMail account management?
+      options:
+        - "1 - No prior PurelyMail context"
+        - "2 - Minimal PurelyMail mentions"
+        - "3 - Some unrelated PurelyMail discussion"
+        - "4 - Mixed topics with some PurelyMail"
+        - "5 - Half PurelyMail, half other topics"
+        - "6 - Mostly PurelyMail with some other topics"
+        - "7 - Primarily PurelyMail focused"
+        - "8 - Almost entirely PurelyMail discussion"
+        - "9 - Continuous PurelyMail conversation"
+        - "10 - Pure PurelyMail management session"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected-result
+    attributes:
+      label: Expected Result
+      description: What did you expect the AI assistant to accomplish?
+      placeholder: |
+        Example: "Assistant should create user 'thomas' on domain 'cool.shop' with a secure password"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: actual-result
+    attributes:
+      label: Actual Result
+      description: What actually happened? Include any error messages from the assistant or MCP server
+      placeholder: |
+        Example: "Assistant failed with error 'invalidRequest' or used wrong parameters"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected-parameters
+    attributes:
+      label: Expected MCP Tool Parameters
+      description: |
+        What parameters should the assistant have used? (Based on PurelyMail API requirements)
+        For CreateUser: userName (required), domainName (required), password (required)
+        Optional: enablePasswordReset, recoveryEmail, enableSearchIndexing, sendWelcomeEmail
+      placeholder: |
+        Example for CreateUser:
+        - userName: "thomas" (required)
+        - domainName: "cool.shop" (required)  
+        - password: "[generated]" (required)
+        - enablePasswordReset: true (optional, defaults to true)
+        
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment Details
+      description: Technical environment information
+      placeholder: |
+        - MCP Client: [e.g. Claude Desktop v1.0.0]
+        - MCP Server Version: [e.g. 1.2.3]
+        - Node.js Version: [e.g. 18.17.0]
+        - Operating System: [e.g. macOS 13.0, Windows 11, Ubuntu 22.04]
+    validations:
+      required: true
+      
+  - type: textarea
+    id: conversation-flow
+    attributes:
+      label: Conversation Flow (if relevant)
+      description: |
+        If this bug occurred after multiple exchanges, briefly describe the conversation flow
+      placeholder: |
+        1. Asked assistant to list domains
+        2. Asked to create user on specific domain  
+        3. Bug occurred when trying to create app password
+        
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

@@ -10,7 +10,7 @@
 
 **Potential Solutions**:
 1. **One tool per operation**: Create individual tools like `create_user`, `delete_user`, `get_user` instead of grouped tools
-2. **Operation-specific schemas**: Generate different input schemas per action within grouped tools  
+2. **Operation-specific schemas**: Generate different input schemas per action within grouped tools
 3. **Better parameter documentation**: Add operation-specific parameter requirements to descriptions
 
 **Current Workaround**: Users must know the correct parameter names for each operation (documented in swagger spec).
@@ -19,7 +19,7 @@
 
 **Problem**: The PurelyMail API uses inconsistent parameter names across different endpoints:
 - Most user operations expect `userName` (e.g., Get User, Delete User, Modify User)
-- Create App Password operation expects `userHandle` 
+- Create App Password operation expects `userHandle`
 - Both refer to the same concept: full email address like "user@domain.com"
 
 **Impact**: When tools combine multiple endpoints, both parameter names appear in the schema, causing confusion about which to use.

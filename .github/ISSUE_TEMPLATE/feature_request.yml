@@ -1,0 +1,133 @@
+name: 🚀 MCP Server Feature Request
+description: Suggest a new feature or improvement for the PurelyMail MCP Server
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature for the PurelyMail MCP Server!
+        Help us understand how to improve AI assistant interactions.
+        
+  - type: dropdown
+    id: feature-type
+    attributes:
+      label: Feature Type
+      description: What type of feature are you requesting?
+      options:
+        - New MCP Tool (expose new PurelyMail API endpoint)
+        - Improve Existing Tool (better parameters, validation, etc.)
+        - Better AI Assistant Integration (prompting, context handling)
+        - Developer Experience (docs, error messages, etc.)
+        - Performance/Reliability Improvement
+        - Other
+    validations:
+      required: true
+      
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case Description
+      description: Describe the specific use case or workflow this feature would enable
+      placeholder: |
+        Example: "I want AI assistants to be able to bulk-create multiple email accounts 
+        from a CSV file or list, instead of creating them one by one"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: current-limitation
+    attributes:
+      label: Current Limitation
+      description: What's currently missing or difficult to achieve?
+      placeholder: |
+        Example: "Currently, the assistant has to make separate API calls for each user creation, 
+        which is slow and prone to partial failures"
+    validations:
+      required: true
+      
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed Solution & Flow
+      description: |
+        Describe your proposed solution and how it would work from a high-level perspective.
+        Include the expected conversation flow with an AI assistant.
+      placeholder: |
+        Example:
+        1. User provides: "Create these email accounts: thomas@cool.shop, sarah@cool.shop, mike@cool.shop"
+        2. Assistant uses new "Bulk Create Users" tool with array of user definitions
+        3. Tool validates all inputs before starting, returns detailed success/failure report
+        4. Assistant reports back with summary of created accounts and any failures
+    validations:
+      required: true
+      
+  - type: textarea
+    id: purelymail-api
+    attributes:
+      label: Related PurelyMail API Endpoints
+      description: |
+        If this involves new API integration, which PurelyMail endpoints would be involved?
+        Check the swagger spec or mention if this requires new PurelyMail API features.
+      placeholder: |
+        Example: 
+        - Extends existing "Create User" endpoint
+        - OR requires new bulk endpoint from PurelyMail
+        - OR combines "Create User" + "Create App Password" operations
+        
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How important is this feature for your workflow?
+      options:
+        - Low - Nice to have
+        - Medium - Would improve efficiency  
+        - High - Significantly impacts workflow
+        - Critical - Blocking important use cases
+    validations:
+      required: true
+      
+  - type: dropdown
+    id: assistant-used
+    attributes:
+      label: Primary AI Assistant
+      description: Which AI assistant would you primarily use this feature with?
+      options:
+        - Claude Desktop
+        - Claude Code CLI
+        - Cursor
+        - Codex CLI
+        - Continue (VS Code)
+        - Aider
+        - Multiple assistants
+        - Other MCP Client
+    validations:
+      required: true
+      
+  - type: textarea
+    id: ai-assistant-benefit
+    attributes:
+      label: AI Assistant Benefit
+      description: |
+        How would this feature specifically improve AI assistant interactions?
+        Consider prompt clarity, error handling, context efficiency, etc.
+      placeholder: |
+        Example: "This would reduce the number of back-and-forth exchanges needed,
+        make prompts more natural ('create these 5 accounts' vs individual requests),
+        and provide clearer success/failure feedback"
+        
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any other context, examples, or considerations
+      
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our Code of Conduct
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true

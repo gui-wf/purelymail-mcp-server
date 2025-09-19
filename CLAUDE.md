@@ -22,7 +22,7 @@ MCP (Model Context Protocol) server for PurelyMail email service. Exposes Purely
 
 ## Known Issues
 
-See `KNOWN_ISSUES.md` for detailed documentation of current limitations and workarounds.
+See `docs/KNOWN_ISSUES.md` for detailed documentation of current limitations and workarounds.
 
 ## Commands
 ```bash
@@ -144,3 +144,44 @@ generated-client/       # DO NOT MODIFY - codegen output
 - Sanitize error messages (no sensitive data)
 - Use type-safe generated client methods
 - Never expose raw API responses without validation
+
+## License Management
+
+### Automated License Checking
+
+**CRITICAL**: Our project uses a custom non-commercial license. Before adding/updating packages, use the automated license checking commands.
+
+#### Primary Workflow
+
+**For Any Package Update or Addition:**
+
+1. **Always run license check first**: `/check-license <package-name> [version]`
+2. **Follow the command's recommendations**:
+   - ✅ **Compatible**: Use `/update-license-docs` then proceed with update
+   - 🚨 **Incompatible**: Follow suggestions (keep current, find alternatives, or reconsider project license)
+   - ⚠️ **Needs Review**: Manual decision required
+   - ❓ **Unknown**: Investigation needed
+
+#### Available Commands
+
+- **`/check-license <package> [version]`**: Comprehensive license compatibility check with embedded decision logic
+- **`/update-license-docs <package> <version> <license> [notes]`**: Update documentation after compatibility confirmed
+
+#### Manual Fallback Commands
+
+```bash
+# Check specific package license
+npm view <package>@<version> license
+
+# Check all current package licenses  
+npm list --depth=0 --json | jq '.dependencies | to_entries[] | {name: .key, version: .value.version}'
+```
+
+#### Key Compatibility Rules
+
+- ✅ **Compatible**: MIT, Apache-2.0, BSD-2/3-Clause, ISC, 0BSD
+- 🚨 **Incompatible**: GPL, AGPL, LGPL (any version)
+- ⚠️ **Review Needed**: Proprietary, NonCommercial clauses
+- ❓ **Unknown**: Undefined or unrecognized licenses
+
+**Always use `/check-license` first** - it contains the complete decision tree and will guide you through any scenario.
