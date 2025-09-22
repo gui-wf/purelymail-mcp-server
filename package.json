@@ -1,6 +1,29 @@
 {
   "name": "purelymail-mcp-server",
-  "version": "1.0.0",
+  "version": "1.0.0-1",
+  "description": "MCP server for PurelyMail email service management",
+  "keywords": ["mcp", "mcp-server", "purelymail", "email", "ai", "claude"],
+  "homepage": "https://github.com/gui-wf/purelymail-mcp-server#readme",
+  "bugs": {
+    "url": "https://github.com/gui-wf/purelymail-mcp-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gui-wf/purelymail-mcp-server.git"
+  },
+  "license": "SEE LICENSE IN LICENSE",
+  "author": "Guilherme Fontes <contrib@gui.wf> (https://gui.wf)",
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "src/types/",
+    "purelymail-api-spec.json",
+    "LICENSE",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "type": "module",
   "scripts": {
     "fetch:swagger": "node scripts/fetch-swagger.js",

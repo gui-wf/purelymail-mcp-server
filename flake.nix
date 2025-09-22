@@ -34,6 +34,31 @@
           '';
         };
 
+        # npm publish script
+        packages.npm-publish = pkgs.writeScriptBin "npm-publish" ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+
+          if [ -z "''${NPM_TOKEN:-}" ]; then
+            echo "❌ Error: NPM_TOKEN environment variable is not set"
+            echo "Please set NPM_TOKEN to your npm authentication token"
+            echo "Example: NPM_TOKEN=npm_xxxxxxxxxxxx nix run .#npm-publish"
+            exit 1
+          fi
+
+          echo "📦 Building package..."
+          ${pkgs.nodejs_20}/bin/npm run build
+
+          echo "🔍 Testing package..."
+          ${pkgs.nodejs_20}/bin/npm run test:mock
+
+          echo "📤 Publishing to npm..."
+          ${pkgs.nodejs_20}/bin/npm publish
+
+          echo "✅ Published successfully!"
+          echo "Package available at: https://www.npmjs.com/package/purelymail-mcp-server"
+        '';
+
         # Production package build
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "purelymail-mcp-server";
@@ -70,8 +95,8 @@
 
             # Create executable
             cat > $out/bin/purelymail-mcp <<EOF
-            #!/usr/bin/env node
-            require('$out/share/purelymail-mcp/dist/index.js')
+            #!/usr/bin/env bash
+            exec ${pkgs.nodejs_20}/bin/node $out/share/purelymail-mcp/dist/index.js "\$@"
             EOF
             chmod +x $out/bin/purelymail-mcp
           '';
@@ -108,6 +133,18 @@
             echo "  2. Test: npm run test:mock"
             echo "  3. Commit if satisfied: git add . && git commit -m 'Update API specification'"
           '');
+        };
+
+        # Nix app for publishing to npm
+        apps.npm-publish = {
+          type = "app";
+          program = "${self.packages.${system}.npm-publish}/bin/npm-publish";
+        };
+
+        # Default app - run the MCP server
+        apps.default = {
+          type = "app";
+          program = "${self.packages.${system}.default}/bin/purelymail-mcp";
         };
       }
     );

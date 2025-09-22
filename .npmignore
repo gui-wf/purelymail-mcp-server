@@ -1,0 +1,50 @@
+# Source files (only distribute built files)
+src/
+scripts/
+.claude/
+.github/
+docs/
+nix/
+
+# Development files
+*.test.ts
+*.spec.ts
+vitest.config.ts
+tsconfig.json
+.eslintrc*
+.prettierrc*
+
+# Nix files
+flake.nix
+flake.lock
+*.nix
+
+# Git files
+.git/
+.gitignore
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment files
+.env*
+.npmrc
+
+# MCP config
+.mcp.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# Dependencies
+node_modules/
+
+# Build artifacts not needed
+*.map
+
+# Documentation that's not needed in package
+LICENSE_COMPARISON.md

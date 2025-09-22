@@ -14,28 +14,11 @@ A Model Context Protocol (MCP) server that provides AI assistants with access to
 
 ### 1. Prerequisites
 
-- Node.js 20+
+- Node.js 20+ (if installing from source)
 - PurelyMail API key (for production use)
-- Nix (for reproducible development environment)
+- Nix (for reproducible development environment - source only)
 
-### 2. Installation
-
-```bash
-# Clone and setup
-git clone <repository-url>
-cd purelymail-mcp-server
-
-# Using Nix (recommended)
-nix develop
-
-# Or use npm directly
-npm install
-
-# Generate TypeScript client
-npm run generate:client
-```
-
-### 3. Testing with Mock Data
+### 2. Testing with Mock Data
 
 ```bash
 # Run in mock mode (no API key required)
@@ -45,7 +28,7 @@ MOCK_MODE=true npm run dev
 MOCK_MODE=true npm run inspector
 ```
 
-### 4. Production Setup
+### 3. Production Setup
 
 ```bash
 # Set your PurelyMail API key
@@ -58,6 +41,98 @@ npm run dev
 npm run build
 node dist/index.js
 ```
+
+## MCP Integration
+
+### Claude Desktop
+
+Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+
+#### When installed via npm:
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "npx",
+      "args": ["purelymail-mcp-server"],
+      "env": {
+        "PURELYMAIL_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+#### Using Nix flake from GitHub:
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "nix",
+      "args": ["run", "github:gui-wf/purelymail-mcp-server"],
+      "env": {
+        "PURELYMAIL_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+#### When using from source with Nix:
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "nix",
+      "args": ["run", "/path/to/purelymail-mcp-server#default"],
+      "env": {
+        "PURELYMAIL_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+#### When using from source with Node.js:
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "node",
+      "args": ["/path/to/purelymail-mcp-server/dist/index.js"],
+      "env": {
+        "PURELYMAIL_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
+### Claude Code
+
+For Claude Code, create a `.mcp.json` file in your project root:
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "npx",
+      "args": ["purelymail-mcp-server"],
+      "env": {
+        "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+### Other MCP Clients
+
+The server uses stdio transport and follows the MCP specification, making it compatible with any MCP-compliant client.
 
 ## Available Tools
 
@@ -83,97 +158,43 @@ The server provides 4 main tools grouped by resource:
 - **Actions**: Create/Update Password Reset Method, Delete Password Reset Method, List Password Reset Methods
 - **Use for**: Managing user password recovery options
 
-## Claude Desktop Integration
+## Features
 
-Add to your Claude Desktop configuration:
+- **Type-Safe API Integration**: Generated TypeScript client from PurelyMail's swagger specification
+- **Comprehensive Tool Coverage**: Manage users, domains, routing rules, billing, and password reset methods
+- **Mock Development Mode**: Test and develop safely without touching real data
+- **Resource-Grouped Tools**: Intelligent organization of API endpoints into logical tools
+- **Error Handling**: Robust error reporting and validation
 
-```json
-{
-  "mcpServers": {
-    "purelymail": {
-      "command": "nix",
-      "args": ["run", "/path/to/purelymail-mcp-server#default"],
-      "env": {
-        "PURELYMAIL_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
+## Installation
 
-Or if not using Nix:
-
-```json
-{
-  "mcpServers": {
-    "purelymail": {
-      "command": "node",
-      "args": ["/path/to/purelymail-mcp-server/dist/index.js"],
-      "env": {
-        "PURELYMAIL_API_KEY": "your-api-key-here"
-      }
-    }
-  }
-}
-```
-
-## Documentation
-
-See `docs/` for project documentation including license tracking and known issues.
-
-## Development
-
-### Project Structure
-
-```
-├── src/
-│   ├── index.ts              # MCP server entry point
-│   ├── tools/
-│   │   └── tool-generator.ts # Automatic tool generation from swagger
-│   └── mocks/
-│       └── mock-client.ts    # Mock API implementation
-├── .claude/commands/         # Claude Code automation commands
-├── docs/                     # Project documentation
-├── generated-client/         # Auto-generated TypeScript client
-├── scripts/
-│   └── extract-endpoints.js  # Documentation generation
-├── purelymail-api-spec.json  # Extracted swagger specification
-└── endpoint-descriptions.md  # Generated API documentation
-```
-
-### Available Scripts
-
+### Via npm (Recommended)
 ```bash
-npm run fetch:swagger    # Download latest API spec from PurelyMail
-npm run generate:types   # Regenerate TypeScript types from spec
-npm run generate:docs    # Update endpoint documentation
-npm run update:api       # Complete API update workflow
-npm run build           # Compile TypeScript
-npm run dev             # Run server in development mode
-npm run test:mock       # Test with mock data
-npm run inspector       # Launch MCP Inspector
+npm install -g purelymail-mcp-server
 ```
 
-### API Updates
-
-**Automated (Recommended):**
-- GitHub Actions automatically checks for API changes twice weekly
-- Creates pull requests with updated specifications, types, and documentation
-- No manual intervention required
-
-**Manual Updates:**
+### Via npx (No Installation)
 ```bash
-# One-Command Complete update workflow
-npm run update:api
-
-  # OR step by step:
-  npm run fetch:swagger    # Download latest spec
-  npm run generate:types   # Regenerate TypeScript types
-  npm run generate:docs    # Update documentation
-
-# Using Nix
-nix run .#update-api
+npx purelymail-mcp-server
 ```
+
+### From Source
+```bash
+# Clone and setup
+git clone https://github.com/gui-wf/purelymail-mcp-server.git
+cd purelymail-mcp-server
+
+# Using Nix (recommended)
+nix develop
+
+# Or use npm directly
+npm install
+
+# Build the TypeScript project
+npm run build
+```
+
+
 
 ## Tool Usage Patterns
 
@@ -222,30 +243,13 @@ nix run .#update-api
 - API errors are wrapped and formatted for AI consumption
 - Network and validation errors are handled gracefully
 
-## Known Issues & Limitations
 
-### Tool Granularity
-**AIDEV-NOTE**: Current tool design groups multiple operations per tool (e.g., `manage_user` handles create/delete/modify). This may be too complex for AI assistants. Consider testing against individual tools per operation if assistants struggle with the `action` parameter pattern.
+## Documentation
 
-### API Limitations
-- Some operations require domain ownership verification
-- Rate limiting may apply (not documented in swagger spec)
-- Certain operations may not be reversible
-
-## Contributing
-
-1. Ensure all changes maintain type safety
-2. Update mock responses when adding new endpoints
-3. Test with both mock and real API modes
-4. Run `npm run build` to verify TypeScript compilation
-5. Use MCP Inspector to validate tool registration
-
-## Security
-
-- Never commit API keys to version control
-- Use environment variables for sensitive configuration
-- Mock mode is safe for development and testing
-- Review all changes to generated client code
+See `docs/` for project documentation:
+- [Development Guide](docs/DEVELOPMENT.md) - Development workflow and contributing guidelines
+- [API Updates](docs/API-UPDATES.md) - Keeping the server synchronized with PurelyMail API changes
+- [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
 
 ## License
 

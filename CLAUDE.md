@@ -24,6 +24,10 @@ MCP (Model Context Protocol) server for PurelyMail email service. Exposes Purely
 
 See `docs/KNOWN_ISSUES.md` for detailed documentation of current limitations and workarounds.
 
+## Release Management
+
+See `docs/versioning-guidelines.md` for semantic versioning practices and release procedures.
+
 ## Commands
 ```bash
 # Development
@@ -185,3 +189,27 @@ npm list --depth=0 --json | jq '.dependencies | to_entries[] | {name: .key, vers
 - ❓ **Unknown**: Undefined or unrecognized licenses
 
 **Always use `/check-license` first** - it contains the complete decision tree and will guide you through any scenario.
+
+## Security
+
+### API Key Management
+- Never commit API keys to version control
+- Use environment variables for sensitive configuration (`PURELYMAIL_API_KEY`)
+- Store API keys securely in CI/CD systems (GitHub secrets, etc.)
+
+### Development Safety
+- Mock mode is safe for development and testing
+- Use `MOCK_MODE=true` when possible to avoid real API calls
+- Test with MCP Inspector before connecting to production API
+
+### Code Security
+- Validate all inputs against swagger schemas
+- Sanitize error messages (no sensitive data)
+- Use type-safe generated client methods
+- Never expose raw API responses without validation
+- Review all changes to generated client code
+
+### MCP Server Security
+- The server uses stdio transport - only local connections
+- Environment variables are not logged or exposed
+- Error messages are filtered to prevent data leakage
