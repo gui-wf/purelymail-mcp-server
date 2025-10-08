@@ -216,7 +216,9 @@ export class MockApiClient {
     };
   }
 
-  // Dynamic method mapping for operation IDs
+  // Operation ID mappings for tool execution
+  // The tool generator looks up methods by operationId from the swagger spec
+  // These mappings connect operationIds to the camelCase method implementations above
   "Create User" = this.createUser;
   "Delete User" = this.deleteUser;
   "List Users" = this.listUsers;

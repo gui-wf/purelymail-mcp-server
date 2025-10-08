@@ -6,8 +6,14 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
@@ -18,8 +24,9 @@
             nodejs_20
             nodePackages.typescript
             nodePackages.typescript-language-server
-            jq  # For JSON processing
-            yq  # For YAML processing
+            jq # For JSON processing
+            yq # For YAML processing
+            gum
           ];
 
           shellHook = ''
@@ -62,7 +69,8 @@
         # Production package build
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "purelymail-mcp-server";
-          version = "1.0.0";
+          # AIDEV-TODO: Make version update dynamic and based on whats defined in package.json - to not have to edit many files
+          version = "2.0.0-rc1";
           src = ./.;
 
           buildInputs = [ pkgs.nodejs_20 ];
@@ -105,34 +113,56 @@
         # Nix app for updating API specification
         apps.update-api = {
           type = "app";
-          program = toString (pkgs.writeScript "update-api" ''
-            #!${pkgs.bash}/bin/bash
-            set -euo pipefail
+          program = toString (
+            pkgs.writeScript "update-api" ''
+              #!${pkgs.bash}/bin/bash
+              set -euo pipefail
 
-            echo "🔄 Updating PurelyMail API specification..."
+              echo "🔄 Updating PurelyMail API specification..."
 
-            # Ensure we're in the project root
-            if [ ! -f package.json ]; then
-              echo "❌ Error: Must be run from the project root directory"
-              exit 1
-            fi
+              # Ensure we're in the project root
+              if [ ! -f package.json ]; then
+                echo "❌ Error: Must be run from the project root directory"
+                exit 1
+              fi
 
-            if [ ! -d node_modules ]; then
-              echo "📦 Installing dependencies..."
-              ${pkgs.nodejs_20}/bin/npm install
-            fi
+              if [ ! -d node_modules ]; then
+                echo "📦 Installing dependencies..."
+                ${pkgs.nodejs_20}/bin/npm install
+              fi
 
-            # Use the npm script directly (reuse package.json abstraction)
-            echo "🚀 Running update:api workflow..."
-            ${pkgs.nodejs_20}/bin/npm run update:api
+              # Use the npm script directly (reuse package.json abstraction)
+              echo "🚀 Running update:api workflow..."
+              ${pkgs.nodejs_20}/bin/npm run update:api
 
-            echo "✅ API specification updated successfully!"
-            echo ""
-            echo "Next steps:"
-            echo "  1. Review changes: git diff"
-            echo "  2. Test: npm run test:mock"
-            echo "  3. Commit if satisfied: git add . && git commit -m 'Update API specification'"
-          '');
+              echo "✅ API specification updated successfully!"
+              echo ""
+              echo "Next steps:"
+              echo "  1. Review changes: git diff"
+              echo "  2. Test: npm run test:mock"
+              echo "  3. Commit if satisfied: git add . && git commit -m 'Update API specification'"
+            ''
+          );
+        };
+
+        # Nix app for updating version across package.json and flake.nix
+        apps.update-version = {
+          type = "app";
+          program = toString (
+            pkgs.writeScript "update-version-wrapper" ''
+              #!${pkgs.bash}/bin/bash
+              export PATH=${
+                pkgs.lib.makeBinPath [
+                  pkgs.gum
+                  pkgs.jq
+                  pkgs.gnused
+                  pkgs.diffutils
+                  pkgs.git
+                ]
+              }:$PATH
+              exec ${pkgs.bash}/bin/bash ${./scripts/update-version.sh} "$@"
+            ''
+          );
         };
 
         # Nix app for publishing to npm

@@ -1,19 +1,26 @@
 # Known Issues
 
-## Tool Granularity Problem
+## ✅ RESOLVED: Tool Granularity Problem (v2.0+)
 
-**Problem**: Current tool design groups multiple operations per tool (e.g., `manage_user` handles Create User, Delete User, Get User, etc.). This creates parameter name conflicts and confusing schemas for AI assistants.
+**Status**: **RESOLVED** in v2.0 with new one-tool-per-operation architecture
 
-**Example**: The `manage_user` tool schema includes both `userName` (used by most operations) and `userHandle` (used only by Create App Password), making it unclear which parameter to use for specific operations.
+**Previous Problem**: Earlier versions grouped multiple operations per tool (e.g., `manage_user` handled Create User, Delete User, Get User, etc.). This created parameter name conflicts and confusing schemas for AI assistants.
 
-**Impact**: AI assistants may use wrong parameter names (e.g., `userHandle` instead of `userName` for Get User), causing "Request could not be parsed" errors.
+**Solution Implemented**: As of v2.0, the server uses a flat tool structure where each OpenAPI operation maps to a dedicated MCP tool:
+- ✅ One tool per operation (e.g., `create_user`, `delete_user`, `get_user`)
+- ✅ Each tool has operation-specific parameters only
+- ✅ No parameter conflicts - tool name directly indicates the action
+- ✅ Clear, unambiguous schemas for AI assistants
 
-**Potential Solutions**:
-1. **One tool per operation**: Create individual tools like `create_user`, `delete_user`, `get_user` instead of grouped tools
-2. **Operation-specific schemas**: Generate different input schemas per action within grouped tools
-3. **Better parameter documentation**: Add operation-specific parameter requirements to descriptions
+**Example**: Instead of `manage_user` with an `action` parameter and merged parameters from all user operations, you now have:
+- `create_user` - only the parameters needed for creating users
+- `get_user` - only the parameters needed for retrieving user info
+- `delete_user` - only the parameters needed for deleting users
+- etc.
 
-**Current Workaround**: Users must know the correct parameter names for each operation (documented in swagger spec).
+This eliminates confusion about which parameters to use for which operation.
+
+---
 
 ## Parameter Name Inconsistencies in PurelyMail API
 
@@ -22,13 +29,13 @@
 - Create App Password operation expects `userHandle`
 - Both refer to the same concept: full email address like "user@domain.com"
 
-**Impact**: When tools combine multiple endpoints, both parameter names appear in the schema, causing confusion about which to use.
+**Impact**: With the new one-tool-per-operation architecture (v2.0+), this inconsistency is isolated to specific tools and clearly documented in each tool's schema.
 
 **Root Cause**: This appears to be an API design inconsistency in the original PurelyMail swagger specification.
 
 **Affected Operations**:
-- Get User: expects `userName`
-- Create App Password: expects `userHandle`
+- `get_user`: expects `userName`
+- `create_app_password`: expects `userHandle`
 - All other user operations: expect `userName`
 
-**Workaround**: Always use `userName` except for Create App Password operation.
+**Workaround**: The MCP tools reflect the exact parameter names from the PurelyMail API. AI assistants can see the correct parameter name in each tool's schema. Always use `userName` except for the `create_app_password` tool which uses `userHandle`.

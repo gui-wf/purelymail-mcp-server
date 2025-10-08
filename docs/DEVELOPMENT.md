@@ -33,6 +33,12 @@ npm run fetch:swagger    # Download latest API spec from PurelyMail
 npm run generate:types   # Regenerate TypeScript types from spec
 npm run generate:docs    # Update endpoint documentation
 npm run update:api       # Complete API update workflow (fetch + generate + docs)
+
+# Version Management
+npm run version:update 2.0.0            # Update version (npm script)
+./scripts/update-version.sh 2.0.0       # Update version (direct script)
+./scripts/update-version.sh -y 2.0.0    # Update version (non-interactive)
+nix run .#update-version -- 2.0.0       # Update version via Nix
 ```
 
 **Key points:**
@@ -43,13 +49,14 @@ npm run update:api       # Complete API update workflow (fetch + generate + docs
 
 ## Tool Usage Patterns
 
+As of v2.0+, the server uses a flat tool structure with one tool per operation.
+
 ### Example: Creating a User
 
 ```json
 {
-  "tool": "manage_user",
+  "tool": "create_user",
   "arguments": {
-    "action": "Create User",
     "userName": "john",
     "domainName": "example.com",
     "password": "secure-password",
@@ -63,10 +70,20 @@ npm run update:api       # Complete API update workflow (fetch + generate + docs
 
 ```json
 {
-  "tool": "manage_domains",
+  "tool": "list_domains",
   "arguments": {
-    "action": "List Domains",
     "includeShared": false
+  }
+}
+```
+
+### Example: Getting User Details
+
+```json
+{
+  "tool": "get_user",
+  "arguments": {
+    "userName": "john@example.com"
   }
 }
 ```
@@ -119,7 +136,25 @@ npm install
 
 1. **Check API spec**: Ensure the PurelyMail API supports the feature
 2. **Update types**: Run `npm run generate:types` if API spec changed
-3. **Implement feature**: Add to appropriate tool or create new tool
+3. **Implement feature**: Tools are auto-generated from OpenAPI spec
 4. **Add mock responses**: Update `mock-client.ts` with example responses
 5. **Test thoroughly**: Use both mock and real API modes
 6. **Update documentation**: Update relevant docs and README if needed
+
+### Releasing New Versions
+
+See `docs/versioning-guidelines.md` for complete release process. Quick summary:
+
+1. **Update version**:
+   ```bash
+   npm run version:update 2.0.0
+   # or: ./scripts/update-version.sh 2.0.0
+   # or: nix run .#update-version -- 2.0.0
+   ```
+2. **Push tag** (triggers automated release):
+   ```bash
+   git push origin v2.0.0
+   ```
+3. **GitHub Actions** automatically publishes to npm
+
+The version script updates both `package.json` and `flake.nix`, shows a diff preview, and offers to create a git tag.
