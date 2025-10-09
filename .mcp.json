@@ -1,12 +1,5 @@
 {
   "mcpServers": {
-    "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "mcp-sequentialthinking-tools"],
-      "env": {
-        "MAX_HISTORY_SIZE": "1000"
-      }
-    },
     "purelymail": {
       "command": "npx",
       "args": [
@@ -16,6 +9,13 @@
       "env": {
         "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}",
         "MOCK_MODE": "false"
+      }
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": ["-y", "mcp-sequentialthinking-tools"],
+      "env": {
+        "MAX_HISTORY_SIZE": "1000"
       }
     },
     "perplexity": {

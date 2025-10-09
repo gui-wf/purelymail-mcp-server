@@ -6,8 +6,14 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in
@@ -105,34 +111,36 @@
         # Nix app for updating API specification
         apps.update-api = {
           type = "app";
-          program = toString (pkgs.writeScript "update-api" ''
-            #!${pkgs.bash}/bin/bash
-            set -euo pipefail
+          program = toString (
+            pkgs.writeScript "update-api" ''
+              #!${pkgs.bash}/bin/bash
+              set -euo pipefail
 
-            echo "🔄 Updating PurelyMail API specification..."
+              echo "🔄 Updating PurelyMail API specification..."
 
-            # Ensure we're in the project root
-            if [ ! -f package.json ]; then
-              echo "❌ Error: Must be run from the project root directory"
-              exit 1
-            fi
+              # Ensure we're in the project root
+              if [ ! -f package.json ]; then
+                echo "❌ Error: Must be run from the project root directory"
+                exit 1
+              fi
 
-            if [ ! -d node_modules ]; then
-              echo "📦 Installing dependencies..."
-              ${pkgs.nodejs_20}/bin/npm install
-            fi
+              if [ ! -d node_modules ]; then
+                echo "📦 Installing dependencies..."
+                ${pkgs.nodejs_20}/bin/npm install
+              fi
 
-            # Use the npm script directly (reuse package.json abstraction)
-            echo "🚀 Running update:api workflow..."
-            ${pkgs.nodejs_20}/bin/npm run update:api
+              # Use the npm script directly (reuse package.json abstraction)
+              echo "🚀 Running update:api workflow..."
+              ${pkgs.nodejs_20}/bin/npm run update:api
 
-            echo "✅ API specification updated successfully!"
-            echo ""
-            echo "Next steps:"
-            echo "  1. Review changes: git diff"
-            echo "  2. Test: npm run test:mock"
-            echo "  3. Commit if satisfied: git add . && git commit -m 'Update API specification'"
-          '');
+              echo "✅ API specification updated successfully!"
+              echo ""
+              echo "Next steps:"
+              echo "  1. Review changes: git diff"
+              echo "  2. Test: npm run test:mock"
+              echo "  3. Commit if satisfied: git add . && git commit -m 'Update API specification'"
+            ''
+          );
         };
 
         # Nix app for publishing to npm
