@@ -70,14 +70,14 @@
         packages.default = pkgs.stdenv.mkDerivation {
           pname = "purelymail-mcp-server";
           # AIDEV-TODO: Make version update dynamic and based on whats defined in package.json - to not have to edit many files
-          version = "2.0.0-rc1";
+          version = "2.0.0-rc2";
           src = ./.;
 
           buildInputs = [ pkgs.nodejs_20 ];
 
           buildPhase = ''
             # Install dependencies (production only)
-            npm ci --production
+            npm ci --omit=dev
 
             # Generate types if spec exists (no network calls during build)
             if [ -f purelymail-api-spec.json ]; then

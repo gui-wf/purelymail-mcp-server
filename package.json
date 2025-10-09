@@ -1,6 +1,6 @@
 {
   "name": "purelymail-mcp-server",
-  "version": "2.0.0-rc1",
+  "version": "2.0.0-rc2",
   "description": "MCP server for PurelyMail email service management",
   "keywords": [
     "mcp",
@@ -21,6 +21,9 @@
   "license": "SEE LICENSE IN LICENSE",
   "author": "Guilherme Fontes <contrib@gui.wf> (https://gui.wf)",
   "main": "dist/index.js",
+  "bin": {
+    "purelymail-mcp-server": "dist/index.js"
+  },
   "files": [
     "dist/",
     "src/types/",
@@ -31,6 +34,7 @@
   "publishConfig": {
     "access": "public"
   },
+  "preferGlobal": false,
   "type": "module",
   "scripts": {
     "fetch:swagger": "node scripts/fetch-swagger.js",

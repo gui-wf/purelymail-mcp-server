@@ -2,10 +2,7 @@
   "mcpServers": {
     "purelymail": {
       "command": "npx",
-      "args": [
-        "tsx",
-        "/home/guibaeta/Projects/purelymail-mcp-server/src/index.ts"
-      ],
+      "args": ["-y", "purelymail-mcp-server"],
       "env": {
         "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}",
         "MOCK_MODE": "false"

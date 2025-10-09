@@ -2,6 +2,36 @@
 
 A Model Context Protocol (MCP) server that provides AI assistants with access to PurelyMail's email management API.
 
+## Usage
+
+**Run with npx (no installation needed):**
+
+```bash
+npx -y purelymail-mcp-server
+```
+
+**Or use Nix (via GitHub flake):**
+
+```bash
+nix run github:gui-wf/purelymail-mcp-server
+```
+
+**Configure in your MCP client:**
+
+```json
+{
+  "mcpServers": {
+    "purelymail": {
+      "command": "npx",
+      "args": ["-y", "purelymail-mcp-server"],
+      "env": {
+        "PURELYMAIL_API_KEY": "your-api-key-here"
+      }
+    }
+  }
+}
+```
+
 ## Features
 
 - **Type-Safe API Integration**: Generated TypeScript client from PurelyMail's swagger specification
@@ -48,14 +78,14 @@ node dist/index.js
 
 Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
-#### When installed via npm:
+#### Using npx (recommended - no installation):
 
 ```json
 {
   "mcpServers": {
     "purelymail": {
       "command": "npx",
-      "args": ["purelymail-mcp-server"],
+      "args": ["-y", "purelymail-mcp-server"],
       "env": {
         "PURELYMAIL_API_KEY": "your-api-key-here"
       }
@@ -64,7 +94,7 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
 }
 ```
 
-#### Using Nix flake from GitHub:
+#### Using Nix from GitHub:
 
 ```json
 {
@@ -121,7 +151,7 @@ For Claude Code, create a `.mcp.json` file in your project root:
   "mcpServers": {
     "purelymail": {
       "command": "npx",
-      "args": ["purelymail-mcp-server"],
+      "args": ["-y", "purelymail-mcp-server"],
       "env": {
         "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}"
       }
@@ -177,14 +207,14 @@ The server provides 19 individual tools, each corresponding to a specific Purely
 
 ## Installation
 
-### Via npm (Recommended)
+### Via npx (Recommended - No Installation)
 ```bash
-npm install -g purelymail-mcp-server
+npx -y purelymail-mcp-server
 ```
 
-### Via npx (No Installation)
+### Via Nix (GitHub Flake)
 ```bash
-npx purelymail-mcp-server
+nix run github:gui-wf/purelymail-mcp-server
 ```
 
 ### From Source

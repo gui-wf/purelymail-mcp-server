@@ -4,92 +4,17 @@ on:
   push:
     tags:
       - 'v*'
-      - '[0-9]+.[0-9]+.[0-9]+*'
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: read
+      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install Nix
-        uses: cachix/install-nix-action@v24
-        with:
-          nix_path: nixpkgs=channel:nixos-unstable
-
-      - name: Extract version from tag
-        id: version
-        run: |
-          # Remove 'v' prefix if present
-          VERSION="${GITHUB_REF#refs/tags/}"
-          VERSION="${VERSION#v}"
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "📌 Target version: $VERSION"
-
-      - name: Update version in files
-        id: update
-        run: |
-          echo "🔄 Running version update script..."
-          nix run .#update-version -- -y "${{ steps.version.outputs.version }}" > version-output.txt 2>&1
-
-          # Check if changes were made
-          if grep -q "No changes needed" version-output.txt; then
-            echo "changes_needed=false" >> $GITHUB_OUTPUT
-            echo "ℹ️  No version updates needed"
-          else
-            echo "changes_needed=true" >> $GITHUB_OUTPUT
-            echo "✅ Version files updated"
-          fi
-
-          # Save output for PR body
-          cat version-output.txt
-
-      - name: Create Pull Request
-        if: steps.update.outputs.changes_needed == 'true'
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: |
-            chore: Update version to ${{ steps.version.outputs.version }}
-
-            Automated version sync for tag ${{ github.ref_name }}
-          title: 'chore: Sync version to ${{ steps.version.outputs.version }}'
-          body: |
-            ## Version Sync Required
-
-            Latest version was changed to `${{ steps.version.outputs.version }}`, and the following files need updating to sync with the tagged version:
-
-            **Changed files:**
-            - `package.json`
-            - `flake.nix`
-
-            ### Diff
-
-            ```diff
-            $(cat version-output.txt)
-            ```
-
-            ---
-
-            🤖 This PR was created automatically by the **Publish to npm** workflow.
-
-            **Next steps:**
-            1. Review the changes
-            2. Merge this PR
-            3. The npm publish will proceed after merge
-          branch: automated/version-sync-${{ steps.version.outputs.version }}
-          delete-branch: true
-          draft: false
-          labels: |
-            automated
-            version-sync
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -107,28 +32,15 @@ jobs:
         run: npm run test:mock
 
       - name: Publish to npm
-        if: steps.update.outputs.changes_needed == 'false'
-        run: npm publish
+        run: npm publish --provenance --access public
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Publish summary
-        if: steps.update.outputs.changes_needed == 'false'
         run: |
+          VERSION="${GITHUB_REF#refs/tags/v}"
           echo "## ✅ Published to npm" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
           echo "- **Package**: [purelymail-mcp-server](https://www.npmjs.com/package/purelymail-mcp-server)" >> $GITHUB_STEP_SUMMARY
           echo "- **Tag**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
-
-      - name: Waiting for version sync
-        if: steps.update.outputs.changes_needed == 'true'
-        run: |
-          echo "## ⏳ Waiting for Version Sync" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "A pull request has been created to sync version files." >> $GITHUB_STEP_SUMMARY
-          echo "npm publish will proceed after the PR is merged and the tag is re-pushed." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Action required:**" >> $GITHUB_STEP_SUMMARY
-          echo "1. Review and merge the version sync PR" >> $GITHUB_STEP_SUMMARY
-          echo "2. Re-tag: \`git tag -f ${{ github.ref_name }} && git push -f origin ${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
