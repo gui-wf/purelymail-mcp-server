@@ -1,6 +1,6 @@
 {
   "name": "purelymail-mcp-server",
-  "version": "2.0.0-rc3",
+  "version": "2.0.0-rc4",
   "description": "MCP server for PurelyMail email service management",
   "keywords": [
     "mcp",

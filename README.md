@@ -13,7 +13,7 @@ npx -y purelymail-mcp-server
 **Or use Nix (via GitHub flake):**
 
 ```bash
-nix run github:gui-wf/purelymail-mcp-server
+nix run github:gui-wf/purelymail-mcp-server --quiet --refresh
 ```
 
 **Configure in your MCP client:**
@@ -101,7 +101,7 @@ Add to your Claude Desktop configuration (`~/Library/Application Support/Claude/
   "mcpServers": {
     "purelymail": {
       "command": "nix",
-      "args": ["run", "github:gui-wf/purelymail-mcp-server"],
+      "args": ["run", "github:gui-wf/purelymail-mcp-server", "--quiet", "--refresh"],
       "env": {
         "PURELYMAIL_API_KEY": "your-api-key-here"
       }
@@ -214,7 +214,7 @@ npx -y purelymail-mcp-server
 
 ### Via Nix (GitHub Flake)
 ```bash
-nix run github:gui-wf/purelymail-mcp-server
+nix run github:gui-wf/purelymail-mcp-server --quiet --refresh
 ```
 
 ### From Source

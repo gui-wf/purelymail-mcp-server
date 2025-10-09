@@ -149,13 +149,13 @@ If you use Nix, you can install from the flake.
 ### Run Directly from GitHub
 
 ```bash
-nix run github:gui-wf/purelymail-mcp-server
+nix run github:gui-wf/purelymail-mcp-server --quiet --refresh
 ```
 
 ### Run with API Key
 
 ```bash
-PURELYMAIL_API_KEY="your-api-key" nix run github:gui-wf/purelymail-mcp-server
+PURELYMAIL_API_KEY="your-api-key" nix run github:gui-wf/purelymail-mcp-server --quiet --refresh
 ```
 
 ### Install to Profile
