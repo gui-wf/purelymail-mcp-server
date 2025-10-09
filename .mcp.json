@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "purelymail": {
-      "command": "npx",
-      "args": ["-y", "purelymail-mcp-server"],
+      "command": "nix",
+      "args": ["run", "github:gui-wf/purelymail-mcp-server"],
       "env": {
         "PURELYMAIL_API_KEY": "${PURELYMAIL_API_KEY}",
         "MOCK_MODE": "false"
