@@ -85,42 +85,11 @@ if [[ "$CURRENT_PACKAGE_VERSION" == "$VERSION" ]] && [[ "$CURRENT_FLAKE_VERSION"
     exit 0
   fi
 
-  # Interactive mode: versions are up-to-date, but offer to create git tag
+  # Interactive mode: versions are up-to-date
   if command -v gum >/dev/null 2>&1; then
     gum style --foreground 2 "✓ Versions already up to date: $VERSION"
   else
     echo -e "${GREEN}✓ Versions already up to date: $VERSION${NC}"
-  fi
-  echo ""
-
-  # Offer to create git tag (interactive mode only)
-  if git rev-parse --git-dir > /dev/null 2>&1; then
-    # Check if tag already exists
-    if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-      if command -v gum >/dev/null 2>&1; then
-        gum style --foreground 3 "ℹ️  Git tag v$VERSION already exists"
-      else
-        echo -e "${YELLOW}ℹ️  Git tag v$VERSION already exists${NC}"
-      fi
-    else
-      echo ""
-      if command -v gum >/dev/null 2>&1; then
-        if gum confirm --default=No "Create git tag v$VERSION?"; then
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          gum style --foreground 2 "✓ Created git tag v$VERSION"
-          echo ""
-          gum style --foreground 240 "To push tag: git push origin v$VERSION"
-        fi
-      else
-        read -p "Create git tag v$VERSION? (y/N) " -n 1 -r
-        echo ""
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          echo -e "${GREEN}✓ Created git tag v$VERSION${NC}"
-          echo -e "${NC}To push tag: git push origin v$VERSION${NC}"
-        fi
-      fi
-    fi
   fi
 
   exit 0
@@ -183,23 +152,6 @@ if command -v gum >/dev/null 2>&1; then
     gum style --foreground 240 "Updated files:"
     echo "  • $PACKAGE_JSON"
     echo "  • $FLAKE_NIX"
-    echo ""
-
-    # Offer to create git tag (interactive mode only)
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-      # Check if tag already exists
-      if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-        gum style --foreground 3 "ℹ️  Git tag v$VERSION already exists"
-      else
-        echo ""
-        if gum confirm "Create git tag v$VERSION?"; then
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          gum style --foreground 2 "✓ Created git tag v$VERSION"
-          echo ""
-          gum style --foreground 240 "To push tag: git push origin v$VERSION"
-        fi
-      fi
-    fi
 
     exit 0
   else
@@ -218,22 +170,6 @@ else
   if [[ $REPLY =~ ^[Yy]$ ]]; then
     rm -f "${PACKAGE_JSON}.backup" "${FLAKE_NIX}.backup"
     echo -e "${GREEN}✓ Version updated to $VERSION${NC}"
-
-    # Offer to create git tag (interactive mode only)
-    if git rev-parse --git-dir > /dev/null 2>&1; then
-      if git rev-parse "v$VERSION" >/dev/null 2>&1; then
-        echo -e "${YELLOW}ℹ️  Git tag v$VERSION already exists${NC}"
-      else
-        echo ""
-        read -p "Create git tag v$VERSION? (y/N) " -n 1 -r
-        echo ""
-        if [[ $REPLY =~ ^[Yy]$ ]]; then
-          git tag -a "v$VERSION" -m "Release v$VERSION"
-          echo -e "${GREEN}✓ Created git tag v$VERSION${NC}"
-          echo -e "${NC}To push tag: git push origin v$VERSION${NC}"
-        fi
-      fi
-    fi
 
     exit 0
   else
