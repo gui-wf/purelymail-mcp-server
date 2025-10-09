@@ -67,46 +67,42 @@
         '';
 
         # Production package build
-        packages.default = pkgs.stdenv.mkDerivation {
+        packages.default = pkgs.buildNpmPackage {
           pname = "purelymail-mcp-server";
-          # AIDEV-TODO: Make version update dynamic and based on whats defined in package.json - to not have to edit many files
           version = "2.0.0-rc2";
           src = ./.;
 
-          buildInputs = [ pkgs.nodejs_20 ];
+          npmDepsHash = "sha256-aUS8yO2xscDjJZf6KjVzCnEA4ZxawVH5gxlTZUyuO0g=";
 
-          buildPhase = ''
-            # Install dependencies (production only)
-            npm ci --omit=dev
-
-            # Generate types if spec exists (no network calls during build)
+          # Generate types before building
+          preBuild = ''
             if [ -f purelymail-api-spec.json ]; then
               npm run generate:types
-            else
-              echo "Warning: purelymail-api-spec.json not found"
-              echo "Run 'nix run .#update-api' to fetch latest spec"
             fi
-
-            # Build using package.json script
-            npm run build
           '';
 
+          # buildNpmPackage automatically runs: npm run build
+
           installPhase = ''
-            mkdir -p $out/{bin,share/purelymail-mcp}
+            runHook preInstall
 
-            # Copy built artifacts
-            cp -r dist $out/share/purelymail-mcp/
-            cp -r src/types $out/share/purelymail-mcp/
-            cp -r src/mocks $out/share/purelymail-mcp/
-            cp package.json $out/share/purelymail-mcp/
-            cp purelymail-api-spec.json $out/share/purelymail-mcp/ 2>/dev/null || true
+            mkdir -p $out/{bin,lib}
 
-            # Create executable
-            cat > $out/bin/purelymail-mcp <<EOF
+            # Copy everything needed
+            cp -r dist $out/lib/
+            cp -r node_modules $out/lib/
+            cp -r src $out/lib/
+            cp package.json $out/lib/
+            cp purelymail-api-spec.json $out/lib/ 2>/dev/null || true
+
+            # Create executable that matches package.json bin field
+            cat > $out/bin/purelymail-mcp-server <<EOF
             #!/usr/bin/env bash
-            exec ${pkgs.nodejs_20}/bin/node $out/share/purelymail-mcp/dist/index.js "\$@"
+            exec ${pkgs.nodejs_20}/bin/node $out/lib/dist/index.js "\$@"
             EOF
-            chmod +x $out/bin/purelymail-mcp
+            chmod +x $out/bin/purelymail-mcp-server
+
+            runHook postInstall
           '';
         };
 
@@ -174,7 +170,7 @@
         # Default app - run the MCP server
         apps.default = {
           type = "app";
-          program = "${self.packages.${system}.default}/bin/purelymail-mcp";
+          program = "${self.packages.${system}.default}/bin/purelymail-mcp-server";
         };
       }
     );
