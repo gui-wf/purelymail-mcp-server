@@ -28,6 +28,33 @@ See `docs/KNOWN_ISSUES.md` for detailed documentation of current limitations and
 
 See `docs/versioning-guidelines.md` for semantic versioning practices and release procedures.
 
+### Version Update Script
+
+Use `scripts/update-version.sh` to update versions across `package.json` and `flake.nix`:
+
+**Interactive Mode** (with gum UI):
+```bash
+./scripts/update-version.sh 2.0.0
+nix run .#update-version -- 2.0.0
+```
+- Shows beautiful colored UI
+- Previews diff before applying
+- Offers to create git tag
+- Safe with automatic rollback on errors
+
+**Non-Interactive Mode** (for automation):
+```bash
+./scripts/update-version.sh -y 2.0.0
+```
+- Outputs "No changes needed" or diff
+- Never creates git tags (used by GitHub Actions)
+- Suitable for CI/CD pipelines
+
+**Automated Release Process**:
+1. Update version: `./scripts/update-version.sh 2.0.0`
+2. Push tag: `git push origin v2.0.0`
+3. GitHub Actions automatically publishes to npm
+
 ## Commands
 ```bash
 # Development
@@ -39,6 +66,12 @@ npm run update:api       # Complete API update (fetch + generate types + docs)
 npm run dev             # Run server in development mode
 npm run test:mock       # Test with mock data
 npm run inspector       # Launch MCP Inspector
+
+# Version Management
+npm run version:update 2.0.0            # Update version (npm script)
+nix run .#update-version -- 2.0.0       # Update version (via nix)
+./scripts/update-version.sh 2.0.0       # Update version (direct script)
+./scripts/update-version.sh -y 2.0.0    # Update version (non-interactive)
 
 # Building
 nix build              # Build production package
@@ -68,7 +101,7 @@ generated-client/       # DO NOT MODIFY - codegen output
 
 ### Error Handling
 - Never throw raw strings - use Error objects
-- Include operation context in errors: `new Error(\`Failed to ${action}: ${details}\`)`
+- Include operation context in errors: `new Error(\`Failed to execute ${operationId}: ${details}\`)`
 - Log errors to stderr, not stdout (stdout is for MCP protocol)
 
 ## Development Workflow
@@ -105,11 +138,15 @@ generated-client/       # DO NOT MODIFY - codegen output
 - Never commit API keys
 - Support both mock and real modes
 
-### Tool Design
-- Group related endpoints into single tools
-- Use swagger operationId as action names
-- Extract descriptions from swagger summary/description
-- Validate inputs with Zod schemas generated from swagger
+### Tool Design (v2.0+ Architecture)
+- **One tool per operation**: Each OpenAPI operation maps to a dedicated MCP tool
+- **Tool naming**: Convert operationId to snake_case (e.g., "Create User" → "create_user")
+- **No action parameter**: Tool name directly indicates the action
+- **Operation-specific schemas**: Each tool has only the parameters it needs
+- **Extract descriptions**: Use swagger operation summary and description
+- **Schema validation**: Direct mapping from requestBody schema to tool input schema
+
+This architecture eliminates parameter conflicts and provides clear, unambiguous tools for AI assistants.
 
 ### Mock Mode
 - Enabled with `MOCK_MODE=true`

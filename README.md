@@ -136,27 +136,36 @@ The server uses stdio transport and follows the MCP specification, making it com
 
 ## Available Tools
 
-The server provides 4 main tools grouped by resource:
+The server provides 19 individual tools, each corresponding to a specific PurelyMail API operation:
 
-### `manage_user`
-- **Actions**: Create User, Delete User, List Users, Modify User, Get User, Create App Password, Delete App Password
-- **Use for**: Managing email users and their settings
+### User Management
+- `create_user` - Create a new email user
+- `delete_user` - Delete an email user
+- `list_users` - List all users under your account
+- `modify_user` - Modify user settings
+- `get_user` - Retrieve user details
+- `create_app_password` - Create an app-specific password
+- `delete_app_password` - Delete an app password
 
-### `manage_domains`
-- **Actions**: Add Domain, List Domains, Update Domain Settings, Delete Domain, Get Ownership Code
-- **Use for**: Managing email domains and DNS settings
+### Password Reset Management
+- `create_or_update_password_reset_method` - Create or update password reset method
+- `delete_password_reset_method` - Delete a password reset method
+- `list_password_reset_methods` - List all password reset methods for a user
 
-### `manage_routing`
-- **Actions**: Create Routing Rule, Delete Routing Rule, List Routing Rules
-- **Use for**: Setting up email forwarding and routing
+### Domain Management
+- `add_domain` - Add a new domain
+- `list_domains` - List all domains
+- `update_domain_settings` - Update domain settings
+- `delete_domain` - Delete a domain
+- `get_ownership_code` - Get DNS ownership verification code
 
-### `manage_billing`
-- **Actions**: Check Account Credit
-- **Use for**: Monitoring account balance and usage
+### Routing Management
+- `create_routing_rule` - Create a new routing rule
+- `delete_routing_rule` - Delete a routing rule
+- `list_routing_rules` - List all routing rules
 
-### `manage_user_password_reset`
-- **Actions**: Create/Update Password Reset Method, Delete Password Reset Method, List Password Reset Methods
-- **Use for**: Managing user password recovery options
+### Billing
+- `check_account_credit` - Check current account credit balance
 
 ## Features
 
@@ -202,9 +211,8 @@ npm run build
 
 ```json
 {
-  "tool": "manage_user",
+  "tool": "create_user",
   "arguments": {
-    "action": "Create User",
     "userName": "john",
     "domainName": "example.com",
     "password": "secure-password",
@@ -218,10 +226,20 @@ npm run build
 
 ```json
 {
-  "tool": "manage_domains",
+  "tool": "list_domains",
   "arguments": {
-    "action": "List Domains",
     "includeShared": false
+  }
+}
+```
+
+### Example: Getting User Details
+
+```json
+{
+  "tool": "get_user",
+  "arguments": {
+    "userName": "john@example.com"
   }
 }
 ```

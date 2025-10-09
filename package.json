@@ -1,8 +1,15 @@
 {
   "name": "purelymail-mcp-server",
-  "version": "1.0.0-1",
+  "version": "2.0.0-rc1",
   "description": "MCP server for PurelyMail email service management",
-  "keywords": ["mcp", "mcp-server", "purelymail", "email", "ai", "claude"],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "purelymail",
+    "email",
+    "ai",
+    "claude"
+  ],
   "homepage": "https://github.com/gui-wf/purelymail-mcp-server#readme",
   "bugs": {
     "url": "https://github.com/gui-wf/purelymail-mcp-server/issues"
@@ -30,6 +37,7 @@
     "generate:types": "openapi-typescript purelymail-api-spec.json -o src/types/purelymail-api.ts",
     "generate:docs": "node scripts/extract-endpoints.js > endpoint-descriptions.md",
     "update:api": "npm run fetch:swagger && npm run generate:types && npm run generate:docs",
+    "version:update": "bash scripts/update-version.sh",
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "test": "vitest",
