@@ -18,7 +18,7 @@
     "type": "git",
     "url": "git+https://github.com/gui-wf/purelymail-mcp-server.git"
   },
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "author": "Guilherme Fontes <contrib@gui.wf> (https://gui.wf)",
   "main": "dist/index.js",
   "bin": {
