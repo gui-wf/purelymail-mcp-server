@@ -69,7 +69,7 @@
         # Production package build
         packages.default = pkgs.buildNpmPackage {
           pname = "purelymail-mcp-server";
-          version = "2.0.0";
+          version = "3.0.0";
           src = ./.;
 
           npmDepsHash = "sha256-aUS8yO2xscDjJZf6KjVzCnEA4ZxawVH5gxlTZUyuO0g=";
