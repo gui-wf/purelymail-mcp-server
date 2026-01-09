@@ -301,10 +301,7 @@ See `docs/` for project documentation:
 
 ## License
 
-This project is licensed under a custom non-commercial license - see the [LICENSE](LICENSE) file for details.
-
-### Commercial Use
-This software is available for non-commercial use only. For commercial licensing, please contact fairuse@gui.wf.
+This project is licensed under MIT license - see the [LICENSE](LICENSE) file for details.
 
 ### Dependencies
 This project uses MIT and Apache-2.0 licensed dependencies. See docs/package-licenses.md for full dependency licensing information.
