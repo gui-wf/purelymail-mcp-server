@@ -10,7 +10,7 @@ import { MockApiClient } from "./mocks/mock-client.js";
 const server = new Server(
   {
     name: "purelymail-server",
-    version: "3.0.0"
+    version: "3.0.1"
   },
   {
     capabilities: {
