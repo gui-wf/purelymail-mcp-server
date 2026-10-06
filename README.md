@@ -301,6 +301,18 @@ See `docs/` for project documentation:
 - [API Updates](docs/API-UPDATES.md) - Keeping the server synchronized with PurelyMail API changes
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Common issues and solutions
 
+
+## Publishing
+
+Releases go through GitHub Actions Trusted Publisher (OIDC). No `NPM_TOKEN` in CI.
+
+1. Bump `version` in `package.json` (and flake if needed).
+2. Merge to `master`.
+3. Tag and push: `git tag vX.Y.Z && git push origin vX.Y.Z`
+4. Workflow `.github/workflows/publish-npm.yml` publishes to npm.
+
+Local/manual publish still needs `NPM_TOKEN` because the repo `.npmrc` uses `${NPM_TOKEN}` (overrides `npm login` in this directory).
+
 ## License
 
 This project is licensed under MIT license - see the [LICENSE](LICENSE) file for details.
