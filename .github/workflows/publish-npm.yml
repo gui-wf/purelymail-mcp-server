@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
+      id-token: write # OIDC for npm Trusted Publisher
 
     steps:
       - name: Checkout repository
@@ -19,8 +19,16 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # Node 24 ships npm >= 11.5.1 needed for trusted publishing
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Check npm for trusted publishing
+        run: |
+          node -v
+          npm -v
+          node -e "const [maj,min]=process.versions.node.split('.').map(Number); if(maj<24) process.exit(1)"
+          node -e "const [maj,min]=require('child_process').execSync('npm -v').toString().trim().split('.').map(Number); if(maj<11||(maj===11&&min<5)) { console.error('need npm >= 11.5.1'); process.exit(1) }"
 
       - name: Install dependencies
         run: npm ci
@@ -29,18 +37,21 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm run test:mock
+        run: MOCK_MODE=true npm test
 
       - name: Publish to npm
-        run: npm publish --provenance --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        # Auth via GitHub OIDC + npm Trusted Publisher (no NODE_AUTH_TOKEN).
+        # Provenance is attached automatically with trusted publishing.
+        run: npm publish --access public
 
       - name: Publish summary
         run: |
           VERSION="${GITHUB_REF#refs/tags/v}"
-          echo "## ✅ Published to npm" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- **Version**: $VERSION" >> $GITHUB_STEP_SUMMARY
-          echo "- **Package**: [purelymail-mcp-server](https://www.npmjs.com/package/purelymail-mcp-server)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tag**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Published to npm"
+            echo ""
+            echo "- **Version**: $VERSION"
+            echo "- **Package**: [purelymail-mcp-server](https://www.npmjs.com/package/purelymail-mcp-server)"
+            echo "- **Tag**: ${{ github.ref_name }}"
+            echo "- **Auth**: GitHub OIDC Trusted Publisher"
+          } >> "$GITHUB_STEP_SUMMARY"
