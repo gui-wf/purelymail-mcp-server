@@ -1,11 +1,12 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 import type { paths } from "../types/purelymail-api.js";
 
-// Load swagger spec for metadata
-const spec = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'purelymail-api-spec.json'), 'utf8')
-);
+// Spec lives with the package, not whatever cwd the MCP client chose.
+const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
+const specPath = path.join(packageRoot, "purelymail-api-spec.json");
+const spec = JSON.parse(fs.readFileSync(specPath, "utf8"));
 
 /**
  * Generate MCP tools from swagger spec using openapi-fetch

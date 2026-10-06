@@ -10,6 +10,8 @@ A Model Context Protocol (MCP) server that provides AI assistants with access to
 npx -y purelymail-mcp-server
 ```
 
+> **Ship note:** npm `latest` is still `1.0.0` (no `bin`). Source and the Nix flake track `3.0.0` (one tool per OpenAPI operation). Until `3.0.0` is published, prefer `nix run github:gui-wf/purelymail-mcp-server --quiet --refresh` or run from a checkout.
+
 **Or use Nix (via GitHub flake):**
 
 ```bash
@@ -37,7 +39,7 @@ nix run github:gui-wf/purelymail-mcp-server --quiet --refresh
 - **Type-Safe API Integration**: Generated TypeScript client from PurelyMail's swagger specification
 - **Comprehensive Tool Coverage**: Manage users, domains, routing rules, billing, and password reset methods
 - **Mock Development Mode**: Test and develop safely without touching real data
-- **Resource-Grouped Tools**: Intelligent organization of API endpoints into logical tools
+- **One Tool Per Operation**: Each OpenAPI operation becomes its own MCP tool (e.g. `list_domains`, `create_user`)
 - **Error Handling**: Robust error reporting and validation
 
 ## Quick Start
@@ -202,7 +204,7 @@ The server provides 19 individual tools, each corresponding to a specific Purely
 - **Type-Safe API Integration**: Generated TypeScript client from PurelyMail's swagger specification
 - **Comprehensive Tool Coverage**: Manage users, domains, routing rules, billing, and password reset methods
 - **Mock Development Mode**: Test and develop safely without touching real data
-- **Resource-Grouped Tools**: Intelligent organization of API endpoints into logical tools
+- **One Tool Per Operation**: Each OpenAPI operation becomes its own MCP tool (e.g. `list_domains`, `create_user`)
 - **Error Handling**: Robust error reporting and validation
 
 ## Installation

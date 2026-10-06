@@ -1,9 +1,11 @@
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
-// Load mock responses from swagger examples
+// Spec lives with the package, not whatever cwd the MCP client chose.
+const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
 const spec = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'purelymail-api-spec.json'), 'utf8')
+  fs.readFileSync(path.join(packageRoot, "purelymail-api-spec.json"), "utf8")
 );
 
 export class MockApiClient {
