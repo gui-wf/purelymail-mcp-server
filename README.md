@@ -10,7 +10,6 @@ A Model Context Protocol (MCP) server that provides AI assistants with access to
 npx -y purelymail-mcp-server
 ```
 
-> **Ship note:** npm `latest` tracks source (one tool per OpenAPI operation). Prefer `npx -y purelymail-mcp-server`, or `nix run github:gui-wf/purelymail-mcp-server --quiet --refresh`.
 
 **Or use Nix (via GitHub flake):**
 
