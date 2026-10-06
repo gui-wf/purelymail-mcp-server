@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url'
 import fs from 'node:fs'
 import { createToolsFromSpec } from './tools/openapi-fetch-generator.js'
 import { MockApiClient } from './mocks/mock-client.js'
+import { createRequire } from 'node:module'
+const require = createRequire(import.meta.url)
+const pkg = require('../package.json') as { version: string }
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -85,7 +88,7 @@ describe('stdio server smoke', () => {
     try {
       expect(err).not.toMatch(/ENOENT/)
       const init = lines.find((l: any) => l.id === 1)
-      expect(init?.result?.serverInfo?.version).toBe('3.0.0')
+      expect(init?.result?.serverInfo?.version).toBe(pkg.version)
       const listed = lines.find((l: any) => l.id === 2)
       expect(listed?.result?.tools?.length).toBe(19)
       const names = listed.result.tools.map((t: any) => t.name)
